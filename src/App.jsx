@@ -1,22 +1,19 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import pomodoLogo from './assets/react.svg' // Using existing react logo temporarily
+import pomodoLogo from './assets/react.svg' 
 
 function App() {
-  // Pomodoro Timer States
+  
   const [timerMinutes, setTimerMinutes] = useState(25);
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
-  const [timerMode, setTimerMode] = useState('work'); // 'work', 'shortBreak', 'longBreak'
+  const [timerMode, setTimerMode] = useState('work'); 
   
-  // Todo List States
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
   const [selectedTodo, setSelectedTodo] = useState(null);
-  // Animation state
   const [animateTimer, setAnimateTimer] = useState(false);
 
-  // Main Timer Logic
   useEffect(() => {
     let interval = null;
     
@@ -24,10 +21,8 @@ function App() {
       interval = setInterval(() => {
         if (timerSeconds === 0) {
           if (timerMinutes === 0) {
-            // Timer complete
             clearInterval(interval);
             setIsActive(false);
-            // Handle timer completion (play sound, switch modes, etc.)
             handleTimerComplete();
           } else {
             setTimerMinutes(timerMinutes - 1);
@@ -44,21 +39,16 @@ function App() {
     return () => clearInterval(interval);
   }, [isActive, timerMinutes, timerSeconds]);
 
-  // Handle timer completion
   const handleTimerComplete = () => {
     if (timerMode === 'work') {
-      // Switch to break after work session
       setTimerMode('shortBreak');
       setTimerMinutes(5);
     } else if (timerMode === 'shortBreak') {
-      // Switch back to work after break
       setTimerMode('work');
       setTimerMinutes(25);
     }
-    // Could also handle long breaks after a certain number of work sessions
   };
 
-  // Timer Controls
   const startTimer = () => {
     setIsActive(true);
   };
@@ -82,7 +72,6 @@ function App() {
   const changeTimerMode = (mode) => {
     if (mode === timerMode) return;
     
-    // Trigger animation
     setAnimateTimer(true);
     
     setTimeout(() => {
@@ -98,12 +87,10 @@ function App() {
       }
       setTimerSeconds(0);
       
-      // End animation
       setAnimateTimer(false);
-    }, 300); // Duration of fade out animation
+    }, 300); 
   };
 
-  // Todo List Functions
   const addTodo = (e) => {
     e.preventDefault();
     if (newTodo.trim() === '') return;
@@ -133,7 +120,6 @@ function App() {
       )
     );
     
-    // If the task is being marked as complete and it's the selected todo, clear it
     if (newCompleted && selectedTodo?.id === id) {
       setSelectedTodo(null);
     }
@@ -147,7 +133,7 @@ function App() {
   };
 
   const startSubTimer = (id) => {
-    // Find the todo before updating state
+    
     const todoToSelect = todos.find(todo => todo.id === id);
     
     setTodos(
@@ -158,7 +144,6 @@ function App() {
       )
     );
     
-    // Set the selected todo directly from our found todo
     setSelectedTodo(todoToSelect);
   };
 
@@ -182,7 +167,6 @@ function App() {
     );
   };
 
-  // Sub-timer effect
   useEffect(() => {
     const intervals = todos.map(todo => {
       if (todo.subTimer.isActive) {
@@ -197,7 +181,6 @@ function App() {
           
           updateSubTimer(todo.id, newMinutes, newSeconds);
           
-          // Update selectedTodo if this is the active task
           if (selectedTodo && todo.id === selectedTodo.id) {
             setSelectedTodo({
               ...todo,
@@ -216,12 +199,10 @@ function App() {
     return () => intervals.forEach(interval => clearInterval(interval));
   }, [todos, selectedTodo]);
 
-  // Format time display
   const formatTime = (minutes, seconds) => {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Helper function to get container background class based on timer mode
   const getTimerContainerClass = () => {
     const baseClass = "timer-container";
     if (animateTimer) return `${baseClass} timer-fade`;
@@ -235,7 +216,6 @@ function App() {
         <h1>Pomodo</h1>
       </header>
       
-      {/* Main Timer Section */}
       <div className={getTimerContainerClass()}>
         <div className="timer-display">
           <h2>{formatTime(timerMinutes, timerSeconds)}</h2>
@@ -281,7 +261,6 @@ function App() {
         </div>
       </div>
       
-      {/* Todo List Section */}
       <div className="todo-container">
         <h2>Todo List</h2>
         
@@ -329,7 +308,6 @@ function App() {
         </ul>
       </div>
       
-      {/* Selected Task Details */}
       {selectedTodo && (
         <div className="selected-task">
           <h3>Currently Tracking: {selectedTodo.text}</h3>
