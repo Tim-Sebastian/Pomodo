@@ -1,5 +1,8 @@
 # POMODO - A Pomodoro timer with a To-Do List built with react
 
+Check it out here - https://pomodo-lemon.vercel.app
+
+
 ## Overview
 Pomodo is a pomodoro tool that I made because my flora plants kept dying. The Ui looks a bit like its meant for star wars or some sort of strip club, but it still gets the job done.
 
